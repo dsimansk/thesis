@@ -112,7 +112,7 @@ The demand to enable interoperability across platforms, programming languages, d
 
 Apache Camel project is one of the integration frameworks used for above mentioned purpose. It is open source based, developed under Apache with a great help from community. The main advantage of Camel is its modularity, for every new communication protocol just a new component needs to be added. That enables Camel to keep the core lightweight and stable to provide the right tools for every given scenario.
 
- The purpose of this thesis is to create new Camel  component. It should act as HTTP provider in Camel. This component should benefit from yet another open source project JBoss Undertow. Undertow is web server, written in Java from scratch and based on non-blocking principles. Similarly to Camel it is lightweight and easy to embed. It is also used in Wildfly application server.
+ The purpose of this thesis is to create new Camel  component. It should act as HTTP provider in Camel. This component should benefit from yet another open source project JBoss Undertow. Undertow is web server, written in Java from scratch and based on non-blocking principles. This component was required through community process as a new feature to incorporate into the distribution. The reasons might not be clear at first as there are already several other HTTP components available in the Camel distribution. Similarly to Camel Undertow is lightweight and easy to embed. It is also used in Wildfly application server. The chapter 2.6.2 contains performance comparison of various HTTP server implementations. From the result it can be seen that among Java based web servers Undertow is constantly placing in the top three. The Undertow is also gaining popularity inside the open source community. It is still relatively young project that might have bright future. The thesis creates base for the future cooperation of Camel and Undertow projects.   
  
 Based on community given approach the new component is named Camel Undertow.   
  
@@ -277,25 +277,25 @@ This class acts as factory of endpoints. Therefore it must implement at least \t
 To be able to send messages outside there has to be Producer class implementation. It is used to establish connection, marshal the data and send them to particular target. \texit{UndertowProducer} in this thesis acts as HTTP client for sending requests.
 
 \section{Integration in action}
-DZone\footnote{DZone - http://www.dzone.com/}, web site that claims to be online community and collection of resources for technology professionals. The web site is well know in community of IT professionals and has outstanding reputation for serving the high quality content. The integration is one of the most prominent topics that DZone focuses on. In 2014 it has performed update to its overview research among consumers of integration technologies. It provides overview of usage the integration in practice, recommendations from the top engineers and solution architecs and comprehensive comparison of most used solutions. The findings were published in free e-book called \textit{DZone Guide to Enterprise Integration}. This part will summarize the key aspects from the research.\cite{dzone} The relevance of this research is supported by the sample of respondents, most of them have technical background, mainly developers and team leads. The programming language used is Java in 94\% of cases.
+DZone\footnote{DZone - http://www.dzone.com/} web site claims to be online community and collection of resources for technology professionals. The web site is well know in community of IT professionals and has outstanding reputation for serving the high quality content. The integration is one of the most prominent topics that DZone focuses on. In 2014 they performed update to its overview research among consumers of integration technologies. It provided overview of usage the integration in practice, recommendations from the top engineers and solution architects and comprehensive comparison of most used solutions. The findings were published in free e-book called \textit{DZone Guide to Enterprise Integration}. This part will summarize the key aspects from the research.\cite{dzone} The relevance of this research is supported by the sample of respondents, most of them have technical background, mainly developers and team leads. The programming language used is Java in 94\% of cases.
 
 \subsection*{State of Integration}
 The integration scenarios are typically covered by integration framework combined with message queues or ESB.  
-In the beginning ESBs were based on Messaging-Oriented Middleware or required Java EE containers for runtime. They gained on popularity with the increased usage of web services, which were quickly integrated. ESB focuses on covering wide range of scenarios, supported with the tools out of box. It ties together multiple endpoints, where central broker do the heavy lifting of routing, transforming and managing.
+In the beginning ESBs were based on Messaging-Oriented Middleware or required Java EE containers for runtime. They gained on popularity with the increased usage of web services, which were quickly integrated. ESB focuses on covering wide range of scenarios, supported with the tools out of box. It ties together multiple endpoints, where central broker does all the heavy lifting of routing, transforming and managing.
 
-On the other hand integration frameworks like Apache Camel or Spring Integration benefits mainly from outstandig support of enterprise integration patterns. They can be paired with message queues and other frameworks to enrich with missing features to be comparable with full ESBs.
+On the other hand integration frameworks like Apache Camel or Spring Integration benefit mainly from outstanding support of enterprise integration patterns. They can be paired with message queues and other frameworks to enrich with missing features to be comparable with full ESBs.
 
- Previously mentioned can be viewed as traditional well know and verified approache. On the other hand wew emerging trend supported by innovative technological companies seems to be microservices. The idea behind microservices is fundamentally different from ESBs. There is no central point or smart mediator that routes communication, but they rather emphasize smart endpoints and fast transfer channel with minimum of features. Each microservice represents one logical or business feature of the system. The communication channels are not tied to process, but they use web services or remote calls.
+ Previously mentioned can be viewed as traditional well know and verified approach. On the other hand new emerging trend supported by innovative technological companies seems to be microservices. The idea behind microservices is fundamentally different from ESBs. There is no central point or smart mediator that routes communication, but they rather emphasize smart endpoints and fast transfer channel with minimum of features. Each microservice represents one logical or business feature of the system, it shares common principle with processes in Unix-like operating systems to do single thing right. The communication channels are not tied to process, but they use web services or remote calls.
 
 In conclusion there might be an upcoming shift to more decentralized solutions called microservices. Although most of the scenarios can be still well served with the integration frameworks and ESBs.
 
 \subsection*{Leader Board}
-The DZone's research provides interesting static on usage of technologies. 
-The most popular technology among respondents is Spring Integration (42\%), closely followed by the Camel framework (38\%). In the category of ESBs, the winner is Mule ESB (16\%), then WebSphere ESB(15\%) and Oracle ESB (13\%). In conclusion lightweight integration frameworks are more popular taking 63\%.
+The DZone's research provides interesting statistics on usage of technologies. 
+The most popular technology among respondents is Spring Integration\footnote{Spring Integration - http://projects.spring.io/spring-integration/} (42\%), closely followed by the Camel framework (38\%). In the category of ESBs, the winner is Mule ESB\footnote{Mule ESB - http://www.mulesoft.org/what-mule-esb} (16\%), then WebSphere ESB\footnote{WebSphere - http://www-03.ibm.com/software/products/en/wsesb} (15\%) and Oracle ESB\footnote{Oracle ESB -  http://www.oracle.com/technetwork/middleware/service-bus/} (13\%). In conclusion lightweight integration frameworks are more popular taking 63\%.
 
- When ESBs and message queues are compared it ends slightly better for the ESBs. The most popular messaging is ActiveMQ (46\%) that beats low-latenty providers like ZeroMQ or IronMQ. 
+ When ESBs and message queues are compared it ends slightly better for the ESBs. The most popular messaging is ActiveMQ\footnote{Apache ActiveMQ - http://activemq.apache.org/} (46\%) that beats low-latency providers like ZeroMQ\footnote{ZeroMQ - http://zeromq.org} or IronMQ\footnote{IronMQ - http://www.iron.io/mq}. 
  
- The conclusion based on the above mentioned numbers can be made that developers tends to choose lightweight modular solutions rather the full stack of unnecessary features.
+ The conclusion based on the above mentioned numbers can be made that developers tends to choose lightweight modular solutions rather than the full stack of unnecessary features.
 
 
 
@@ -597,9 +597,9 @@ For the future development, once there is Undertow client prepared. There was al
 \bibliography{references}
 
 \begin{thebibliography}{}
-	\bibitem{camel-web} APACHE. \textit{Apache Camel} [online]. \copyright{} 2004- [cit. 2014-12-12]. Dostupné z: \url{http://camel.apache.org/}
+	\bibitem{camel-web} APACHE. \textit{Apache Camel} [online]. \copyright{} 2004- [cit. 2014-12-12]. Available at: \url{http://camel.apache.org/}
 	
-		\bibitem{dzone} DZONE RESEARCH. \textit{Guide to Enterprise Integration} [online]. \copyright{} 2014- [cit. 2014-12-12]. Dostupné z: \url{http://www.dzone.com/research/guide-to-enterprise-integration}
+		\bibitem{dzone} DZONE RESEARCH. \textit{Guide to Enterprise Integration} [online]. \copyright{} 2014- [cit. 2014-12-12]. Available at: \url{http://www.dzone.com/research/guide-to-enterprise-integration}
 	
 	\bibitem{camel-in-action} IBSEN, Claus a Jonathan ANSTEY. \textit{Camel in Action}. Greenwich, Conn.: Manning, c2011, xxxi, ISBN 19-351-8236-6.
 	
