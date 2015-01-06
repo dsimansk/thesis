@@ -571,6 +571,27 @@ There are two additional classes that provides support methods.
 \section{Unit tests}
 The unit tests leverage \textit{CamelTestSupport} classes that provides lot of useful method and mock Endpoints to properly test components. The structure of unit tests follow convention used in Camel project. Every test class represents scenario and has descriptive self-explaining name to be clear for the outside user.
 
+\section{Simple performance comparison}
+The newly created component was compared in simple test with two other components. The comparison was performed between Undertow, Jetty and Netty HTTP. The results supports the conclusion the Undertow is built to be fast and outperform the opponents.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.49\linewidth]{images/1K.png}
+\includegraphics[width=0.49\linewidth]{images/10K.png}
+\caption{Execution time graph for 1000 and 10 0000 requests.}
+\end{figure}
+
+The metric used was simple to demonstrate the possible testing approach. For more comprehensive results a special tool could be used to generates requesta and measure numbers, for example PerfCake\footnote{PerfCake - https://www.perfcake.org/}
+ The scenario was run ten times and average execution time value was calculated afterwards. Test scenario class is called \textit{UndertowPerfComparisonTest} and can be found in unit tests subdirectory. During the first cycle thousand of request was sent, the next cycle the number of request was increased to ten thousand.
+
+Listing of the measured numbers:
+\begin{itemize}
+\item Undertow - 3141 ms; Jetty - 4045; Netty HTTP -  4892
+\item Undertow - 29755; Jetty - 37792; Netty HTTP - 64532
+\end{itemize}
+
+
+
 \section{Examples of usage}
 
 
