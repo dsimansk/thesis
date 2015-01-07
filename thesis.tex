@@ -108,11 +108,11 @@ Apache Camel, Undertow, Java NIO, XNIO, integration, web server, component
 \chapter{Introduction}
 We, the people of the Information Age, are surrounded with technologies providing us information or making our lives easier. We benefit from machine-processed informations and in many areas we are totally dependent on computers controlling the environment around. The IT segment is fast paced and innovative. New technologies emerge every day, but sometimes lifetime is as short as the development time. Nevertheless, there are still many information systems based on various programming languages up and running, containing numerous priceless data. The improvements made in networking and the Internet over the years changed the view we anticipate information systems. Nowadays we see need for connecting them together to benefit from code already created and running to provide input data or business logic. Although not every system has the right interface to be interconnected and is ready or designed to operate in complex environment. All of that creates the base ground from which integration frameworks raise to satisfy already existing demand.
 
-The demand to enable interoperability across platforms, programming languages, data formats and interfaces. Main goal of an integration framework should be to simplify the complexity of integration and also unify the management. Also it can not be hard to adopt to actually bring benefit to users rather then discourage them with difficult learning process.
+The demand to enable interoperability across platforms, programming languages, data formats and interfaces. Main goal of an integration framework should be to simplify the complexity of integration and also unify the management. Also it can not be hard to adopt to actually bring benefits to users rather then discourage them with difficult learning process.
 
-Apache Camel project is one of the integration frameworks used for above mentioned purpose. It is open source based, developed under Apache with a great help from community. The main advantage of Camel is its modularity, for every new communication protocol just a new component needs to be added. That enables Camel to keep the core lightweight and stable to provide the right tools for every given scenario.
+Apache Camel project\cite{camel-web} is one of the integration frameworks used for above mentioned purpose. It is open source based, developed under Apache with a great help from community. The main advantage of Camel is its modularity, for every new communication protocol just a new component needs to be added. That enables Camel to keep the core lightweight and stable to provide the right tools for every given scenario.
 
- The purpose of this thesis is to create new Camel  component. It should act as HTTP provider in Camel. This component should benefit from yet another open source project JBoss Undertow. Undertow is web server, written in Java from scratch and based on non-blocking principles. This component was required through community process as a new feature to incorporate into the distribution. The reasons might not be clear at first as there are already several other HTTP components available in the Camel distribution. Similarly to Camel Undertow is lightweight and easy to embed. It is also used in Wildfly application server. The chapter 2.6.2 contains performance comparison of various HTTP server implementations. From the result it can be seen that among Java based web servers Undertow is constantly placing in the top three. The Undertow is also gaining popularity inside the open source community. It is still relatively young project that might have bright future. The thesis creates base for the future cooperation of Camel and Undertow projects.   
+ The purpose of this thesis is to create new Camel  component. It should act as HTTP\footnote{HTTP - Hypertext Transfer Protocol} provider in Camel. This component should benefit from yet another open source project JBoss Undertow\cite{undertow-web}. Undertow is web server, written in Java\cite{java-web} from scratch and based on non-blocking principles. This component was required through community process as a new feature to incorporate into the distribution. The reasons might not be clear at first as there already are several other HTTP components available in the Camel distribution. Similarly to Camel, Undertow is lightweight and easy to embed. It is also used in Wildfly application server. The chapter 2.6.2 contains performance comparison of various HTTP server implementations. From the result it can be seen that among Java based web servers Undertow is constantly placing in the top three. The Undertow is also gaining popularity inside the open source community. It is still relatively young project that might have bright future. The thesis creates base for the future cooperation of Camel and Undertow projects.   
  
 Based on community given approach the new component is named Camel Undertow.   
  
@@ -130,7 +130,7 @@ The last chapter is conclusion of the work.
 This chapter introduces technologies that are used for implementation of Camel Undertow component. Every sub-chapter consists of description and typical uses cases, where the specific technology excels.
 
 \section{Apache Camel}
-Apache Camel is open source rule-based mediation framework implemented in Java. The core of the framework is formed around the theory of EIPs\footnote{EIP - Enterprise Integration Pattern} by Gregor Hohpe and Bobby Wolf. It creates base layer in integration efforts across various applications, e.g. in stand alone routing, communication of web services, enterprise messaging solutions or full integration platforms (also known as ESB\footnote{ESB - Enterprise Service Bus}) like Apache ServiceMix, JBoss Fuse or Fuse Service Works. Based on previously mentioned fact, Camel is not an enterprise service bus on its own, for instance it does not provide container support or messaging broker. It aims to be lightweight, easy to adopt and extendable for developers. There is also no complex class hierarchy or APIs rather emphasising the focus on integration tasks.
+Apache Camel is open source rule-based mediation framework implemented in Java. The core of the framework is formed around the theory of EIPs\footnote{EIP - Enterprise Integration Pattern} by Gregor Hohpe and Bobby Wolf.\cite{eip} It creates base layer in integration efforts across various applications, e.g. in stand alone routing, communication of web services, enterprise messaging solutions or full integration platforms (also known as ESB\footnote{ESB - Enterprise Service Bus}) like Apache ServiceMix, JBoss Fuse or JBoss Fuse Service Works. Based on previously mentioned fact, Camel is not an enterprise service bus on its own, for instance it does not provide container support or messaging broker. It aims to be lightweight, easy to adopt and extendable for developers. There is also no complex class hierarchy or APIs rather emphasizing the focus on integration tasks.\cite{camel-in-action}
 
 \subsection{Fundamental principles of Camel}
 
@@ -161,39 +161,41 @@ The format of DSL varies by the preference or experience of individual. It is no
 \end{listing}
 
 \subsection*{Modular implementation}
-The next key feature, that supports wide adoption of the framework in integration world, is modularity. The Camel can be easily extended to  consume or to produce data to endpoint. Out of the box it comes with handful of components to start with, called camel-core including bean, file, log, mock. Following the structure given by the framework and extending core classes developers are able to provide solution to whatever unique system you could imagine. On top of that, there are many more developed by Apache community and third-parties\footnote{link to components list}. The most common integration scenarios can be served by already existing components to integrate JMS, web services (SOAP or REST), database connections, filesystem resources or mobile push services.
+The next key feature, that supports wide adoption of the framework in integration world, is modularity. The Camel can be easily extended to  consume or to produce data to endpoint. Out of the box it comes with handful of components to start with, called camel-core including bean, file, log, mock. Following the structure given by the framework and extending core classes developers are able to provide solution to whatever unique system you could imagine. On top of that, there are many more developed by Apache community and third-parties\footnote{List of components - http://camel.apache.org/components.html}. The most common integration scenarios can be served by already existing components to integrate JMS\footnote{JMS - Java Messaging Service}, web services (SOAP\footnote{SOAP - Simple Object Access Protocol} or REST\footnote{REST - Representational State Transfer}), database connections, filesystem resources or mobile push services.
 
 \subsection*{Automatic type converters}
-Built-in automatic type converter is able to work with more than 150 class types out of the box. For most of the scenarios the converter is available, but also custom ones can be implemented easily. This feature is one of the most favorite in the community. It can by easily triggered by the following example which demonstrates that method used to retrieve body takes as a parameter desired return type, the converter is used without any further interaction from the calling code.
+Built-in automatic type converter is able to work with more than hundred and fifty class types out of the box. For most of the scenarios the converter is available, but also custom ones can be implemented easily. This feature is one of the most favorite in the community. It can by easily triggered by the following example \ref{converter} which demonstrates that method used to retrieve body takes as a parameter desired return type, the converter is used without any further interaction from the calling code.
 
 \begin{listing}[ht]
 	\inputminted[]{java}{sources/converter.java}
 	\caption{TypeConverter invocation}
+	\labe{converter}
 \end{listing}
 
 \subsection*{Convention over configuration}
-The ease of configuration is another fundamental principle to enable developers focus on important task rather than learning number of complicated configuration options. Endpoints can be configured directly in route definitions with URI options as the example demonstrates.
+The ease of configuration is another fundamental principle to enable developers focus on important tasks rather than learning number of complicated configuration options. Endpoints can be configured directly in route definitions with URI options as the example \ref{uri-option} demonstrates.
 \begin{listing}[ht]
 	\inputminted[]{java}{sources/uri.java}
 	\caption{URI options configurations}
+	\label{uri-option}
 \end{listing}
 
 
 \subsection*{Lightweight from the start}
 From the first line it is designed to be undemanding and resource friendly. Core library of Camel has about 1.6 MB in total with minimum of third party dependencies.  Embedding the framework is straightforward regardless of target platform, which can be web application, Spring container, OSGi bundle or various cloud platforms. 
 
-\subsection{Message's types}
-Various kind of data types are transported in Camel's routes as Messages. There are to main classes that create abstraction of messages, Message\footnote{Class of org.apache.camel.Message} and Exchange\footnote{Class of org.apache.camle.Exchange}.
+\subsection{Message types}
+Various kind of data types are transported in Camel's routes as Messages. There are two main classes that create abstraction of messages, Message\footnote{Class of org.apache.camel.Message} and Exchange\footnote{Class of org.apache.camle.Exchange}.
 %% linebreak
 \\ \\
-Message object represents data carried in routes from sender to receiver in system's communication. It consists of body, headers and optional attachments. Every Message has unique identifier (UID). UID format is not strictly given by Camel and dependent on linking protocol. If the protocol doesn't have UID scheme available, there is generic generator provided by framework.
+Message object represents data carried in routes from sender to receiver in system's communication. It consists of body, headers and optional attachments. Every Message has unique identifier (UID). UID format is not strictly given by Camel and is dependent on linking protocol. If the protocol doesn't have UID scheme available, there is generic generator provided by framework.
 
 Headers are pairs of key and value, based on very same principle as in HTTP protocol. They contain identifying informations as UID, sender, receiver, type of content, encoding and authentication information.
 
-Body represents payload or content of Message. It has generic Object type to store any kind of content. Acceptance of body type by receiver has to be ensured by application embedding Camel, either by transformation inside the route or by using of automatic type converter.
+Body represents payload or content of the message. It has generic Object type to store any kind of content. Acceptance of body type by receiver has to be ensured by application embedding Camel, either by transformation inside the route or by using of automatic type converter.
 %% linebreak
 \\ \\
-Exchange object is a message's container for routing and encapsulates Message. It supports message exchange patterns (MEPs). Property to define messaging style can set in exchange pattern, either one-way or request-response. One-way is called \textit{InOnly} and is used for example in JMS, when sender does not require response. Request-response is defined as \textit{InOut}, most typical example is HTTP transport, when client needs to receive reply.
+Exchange object is a message's container for routing and encapsulates Message. It supports message exchange patterns (MEPs). Property to define messaging style can be set in exchange pattern, either one-way or request-response. One-way is called \textit{InOnly} and is used for example in JMS, when sender does not require response. Request-response is defined as \textit{InOut}, most typical example is HTTP transport, when client needs to receive reply.
 Overview of Exchange's content:
 \begin{itemize}
 \item Exchange ID - unique identifier of Exchange
@@ -226,7 +228,7 @@ Camel context is commonly referenced as container, which keeps everything togeth
 \item routes
 \item type converters
 \item data formats
-\item registry - for beans look up. Default is JNDI registry. If Camel is combined with Spring or OSGi container, it uses native registry mechanism for the deployment
+\item registry - for beans look up. Default is JNDI registry\footnote{JNDI registry - Java Naming and Directory Interface http://docs.oracle.com/javase/8/docs/technotes/guides/jndi/jndi-rmi.html}. If Camel is combined with Spring or OSGi container, it uses native registry mechanism for the deployment
 \end{itemize}
 
 \subsection*{Routers and routing}
@@ -235,22 +237,22 @@ Routes are one of the core concepts used in this framework. The route holds defi
 Routing works under the hood and is not visible to users. It ensures proper routing from the sender to receiver without issues.
 
 \subsection*{Processor}
-The name is self explaining. Processor is responsible for processing incoming exchange, creation, modification or removal payload and headers. Many processors can be chained together and are invoked by the rules defined in route. Most of built-in processors are implementation of EIPs, as stated previously Camel supports most of integration patterns.\footnote{EIPs in Camel - http://camel.apache.org/eip.html} Users has possibility to implement custom processors and add them to route.   
+The name is self explaining. Processor is responsible for processing incoming exchange, creation, modification or removal of payload and headers. Many processors can be chained together and are invoked by the rules defined in route. Most of built-in processors are implementation of EIPs, as stated previously, Camel supports most of integration patterns.\footnote{EIPs in Camel - http://camel.apache.org/eip.html} Users has possibility to implement custom processors and add them to the route.   
 
 \subsection*{Component}
 Components add modularity to Camel, they are main extension point. Their task is to be factory of endpoints. The detailed overview of creating new component will be given later in subchapter 2.2. 
 
 \subsection*{Endpoint}
-Endpoints represent sender or receiver on the of message channel. Enpoint is configured by URI, during runtime Camel looks up an endpoint by its URI. Format of URI has three important parts: scheme, context path and options. The scheme contains information about component to be used. In this thesis our scheme is called \textit{undertow}. Context path identifies the location of endpoint, similarly to web page address. Finally the options part is used to deliver specific configuration for component.
+Endpoints represent sender or receiver on the one end of the message channel. Endpoint is configured by URI, during runtime Camel looks up an endpoint by its URI. Format of URI has three important parts: scheme, context path and options. The scheme contains information about component to be used. In this thesis our scheme is called \textit{undertow}. Context path identifies the location of endpoint, similarly to web page address. Finally the options part is used to deliver specific configuration for component.
 
-One of key task of endpoint is to be factory for creating consumer (receiver) and producer (sender), that can be used in route to get the data flowing.  
+One of the key tasks of endpoint is to be factory for creating consumer (receiver) and producer (sender), that can be used in route to get the data flowing.  
 
 \subsection*{Consumer}
 As already stated, consumers can be seen as receivers of messages. It is the starting point of every route, where the message is sent, wrapped with headers and added to exchange. Exchanges created by consumer are afterwards processed in defined chain of processors. 
 
 There are two types of consumers, event-driven and polling consumers. They could be also called passive and active consumer. Event-driven consumer is in EIP referred as asynchronous receiver, represents client-server communication strategy. It listens on messaging channel and waits for incoming message. 
 
-Polling consumer is active and synchronous, received message has to be processed before polling for another one. Fetches messages from the source. In Camel the scheduled polling consumer can be defined to check for message in time interval.  
+Polling consumer is active and synchronous, received message has to be processed before polling for another one. Basically, it fetches messages from the source. In Camel the scheduled polling consumer can be defined to check for message in time interval.  
 
 
 \subsection*{Producer}
@@ -260,9 +262,9 @@ Producer is used to create and send a message to an endpoint. It is responsible 
 \section{Component development}
 Modularity feature is ensured by components as it was already mentioned. They are used to extend Camel and adapt to new integration tasks and add new protocols support without necessity to edit the core implementation of the framework. This part contains the main principles that should be followed to create custom component.
 
- To speed up the development, it is recommended to use Maven archetype as a base for the new component.\footnote{Maven archetypes - http://camel.apache.org/camel-maven-archetypes.html} The generated skeleton is fully functional HelloWorld example, which is generating dummy messages in intervals. The next step should be naming the component. Component name must be unique among existing components, because it is used in the first part of URI to identify it. List of components distributed with Camel can be found on official web pages. \footnote{List of components - http://camel.apache.org/components.html}
+ To speed up the development, it is recommended to use Maven archetype as a base for the new component.\footnote{Maven archetypes - http://camel.apache.org/camel-maven-archetypes.html} The generated skeleton is fully functional HelloWorld example, which is generating dummy messages in intervals. The next step should be naming the component. Component name must be unique among existing components, because it is used in the first part of URI to identify it. List of components distributed with Camel can be found on official web pages stated earlier. 
  
- The hierarchy of classes that need to be implemented is quiet simple. There are four main classes that together create Camel component, Component, Endpoint, Producer and Consumer. The names are of course self explaining. The Component class is on top for creating and managing the underlying Endpoint class. Moving to the Endpoint class, it's responsible for creating Producer or Consumer as needed. The custom implementation can extend particular Default-prefixed classes and leverage from the default framework code rather than writing everything from scratch. Extending existing classes ensures following of main principles.
+ The hierarchy of classes that need to be implemented is quiet simple. There are four main classes that together create Camel component, Component, Endpoint, Producer and Consumer. The names are of course self explaining. The Component class is on top for creating and managing the underlying Endpoint class. Moving to the Endpoint class, it's responsible for creating Producer or Consumer as needed. The custom implementation can extend particular Default-prefixed classes and leverage from the default framework code rather than writing everything from scratch. Extending existing classes ensures following of main principles.\cite{camel-cookbook}
  
 \subsection*{Component class}
 This class acts as factory of endpoints. Therefore it must implement at least \textit{createEndpoint()} method. The best to achieve it is by extending DefaultComponent. It also contains all parameters that can be set with URI options. Parameters can be annotated with \textit{@UriParams} and then set through reflection by Camel.
@@ -277,11 +279,11 @@ This class acts as factory of endpoints. Therefore it must implement at least \t
 To be able to send messages outside there has to be Producer class implementation. It is used to establish connection, marshal the data and send them to particular target. \texit{UndertowProducer} in this thesis acts as HTTP client for sending requests.
 
 \section{Integration in action}
-DZone\footnote{DZone - http://www.dzone.com/} web site claims to be online community and collection of resources for technology professionals. The web site is well know in community of IT professionals and has outstanding reputation for serving the high quality content. The integration is one of the most prominent topics that DZone focuses on. In 2014 they performed update to its overview research among consumers of integration technologies. It provided overview of usage the integration in practice, recommendations from the top engineers and solution architects and comprehensive comparison of most used solutions. The findings were published in free e-book called \textit{DZone Guide to Enterprise Integration}. This part will summarize the key aspects from the research.\cite{dzone} The relevance of this research is supported by the sample of respondents, most of them have technical background, mainly developers and team leads. The programming language used is Java in 94\% of cases.
+DZone\footnote{DZone - http://www.dzone.com/} web site claims to be online community and collection of resources for technology professionals. The web site is well know in community of IT professionals and has outstanding reputation for serving the high quality content. The integration is one of the most prominent topics that DZone focuses on. In 2014 they performed update to its overview research among consumers of integration technologies. It provided overview of usage the integration in practice, recommendations from the top engineers and solution architects and comprehensive comparison of most used solutions. The findings were published in free e-book called \textit{DZone Guide to Enterprise Integration}\cite{dzone}. This part will summarize the key aspects from the research. The relevance of this research is supported by the sample of respondents, most of them have technical background, mainly developers and team leads. The programming language used is Java in 94\% of cases.
 
 \subsection*{State of Integration}
 The integration scenarios are typically covered by integration framework combined with message queues or ESB.  
-In the beginning ESBs were based on Messaging-Oriented Middleware or required Java EE containers for runtime. They gained on popularity with the increased usage of web services, which were quickly integrated. ESB focuses on covering wide range of scenarios, supported with the tools out of box. It ties together multiple endpoints, where central broker does all the heavy lifting of routing, transforming and managing.
+In the beginning ESBs were based on Messaging-Oriented Middleware or required Java EE containers for runtime. They gained on popularity with the increased usage of web services, which were quickly integrated. ESB focuses on covering wide range of scenarios, supported with the tools out of the box. It ties together multiple endpoints, where central broker does all the heavy lifting of routing, transforming and managing.\cite{esb}
 
 On the other hand integration frameworks like Apache Camel or Spring Integration benefit mainly from outstanding support of enterprise integration patterns. They can be paired with message queues and other frameworks to enrich with missing features to be comparable with full ESBs.
 
@@ -291,26 +293,26 @@ In conclusion there might be an upcoming shift to more decentralized solutions c
 
 \subsection*{Leader Board}
 The DZone's research provides interesting statistics on usage of technologies. 
-The most popular technology among respondents is Spring Integration\footnote{Spring Integration - http://projects.spring.io/spring-integration/} (42\%), closely followed by the Camel framework (38\%). In the category of ESBs, the winner is Mule ESB\footnote{Mule ESB - http://www.mulesoft.org/what-mule-esb} (16\%), then WebSphere ESB\footnote{WebSphere - http://www-03.ibm.com/software/products/en/wsesb} (15\%) and Oracle ESB\footnote{Oracle ESB -  http://www.oracle.com/technetwork/middleware/service-bus/} (13\%). In conclusion lightweight integration frameworks are more popular taking 63\%.
+The most popular technology among respondents is Spring Integration\footnote{Spring Integration - http://projects.spring.io/spring-integration/} (42\%), closely followed by the Camel framework (38\%). In the category of ESBs, the winner is Mule ESB\footnote{Mule ESB - http://www.mulesoft.org/what-mule-esb} (16\%), then WebSphere ESB\footnote{WebSphere - http://www-03.ibm.com/software/products/en/wsesb} (15\%) and Oracle ESB\footnote{Oracle ESB -  http://www.oracle.com/technetwork/middleware/service-bus/} (13\%). In conclusion, lightweight integration frameworks are more popular taking 63\%.
 
  When ESBs and message queues are compared it ends slightly better for the ESBs. The most popular messaging is ActiveMQ\footnote{Apache ActiveMQ - http://activemq.apache.org/} (46\%) that beats low-latency providers like ZeroMQ\footnote{ZeroMQ - http://zeromq.org} or IronMQ\footnote{IronMQ - http://www.iron.io/mq}. 
  
- The conclusion based on the above mentioned numbers can be made that developers tends to choose lightweight modular solutions rather than the full stack of unnecessary features.
+ The conclusion based on the above mentioned numbers can be made that developers tend to choose lightweight modular solutions rather than the full stack of unnecessary features.
 
 
 
 
   
  \section{Java NIO}
-Java NIO represents New IO, an alternative implementation to the standard IO API used in the Java language. The key differences include reading data from channels into buffers or vice versa, whenever the standard API uses streams of bytes or chars. The other are non-blocking IO instead of typical blocking IO, when thread is blocked until read or write is completed.
+Java NIO represents New IO, an alternative implementation to the standard IO API used in the Java language. The key differences include reading data from channels into buffers or vice versa, whenever the standard API uses streams of bytes or chars. The other are non-blocking IO instead of typical blocking IO, when thread is blocked until read or write is completed.\cite{java-nio}
 
-Non-blocking approach means that the execution thread is not blocked, therefore is not waiting for completion of read or write operation instead it redirects it to channel and buffer and continues to operate. Afterwards if the data are available in the buffer even partially, the thread can process it. The write operation acts the same way, data are stored in buffered and written to channel, in the meantime the executing thread can handle some other operation.
+Non-blocking approach means that the execution thread is not blocked, therefore is not waiting for completion of read or write operation, instead it redirects it to channel and buffer and continues to operate. Afterwards if the data are available in the buffer even partially, the thread can process it. The write operation acts the same way, data are stored in buffered and written to channel, in the meantime the executing thread can handle some other operation.
 
 The idea is that a single thread can manage multiple input and output operations. The thread is not blocked by reading from one stream, nevertheless do something useful during meantime.
 
-The Channels are similar to Stream approach with some differences. Data are read or written to Buffer. They are also bi-direction in contrast to Stream which can be used just for reading or writing. Operations performed on Channels are asynchronously. All those differences come from the usage of Buffer, when data are stored from Channel and not processed directly as in Stream.
+The Channels are similar to Stream approach with some differences. Data are read or written to Buffer. They are also bi-direction in contrast to Stream which can be used just for reading or writing. Operations performed on Channels are asynchronous. All those differences come from the usage of Buffer where data are stored from Channel and not processed directly as in Stream.
 
-The Buffers are used for storing data from Channels as mentioned above. In simple Buffers are wrappers for blocks of memory with methods to access the memory easier.  
+The Buffers are used for storing data from Channels as mentioned above. In simple, Buffers are wrappers for blocks of memory with methods to access the memory easier.  
 
 The Selector is a kind of object monitoring multiple channels for events to further extend capability of single thread. The usage of Selector gives a possibility to use one IO thread to process data from multiple Channels, every time the Channel is ready to be read or written Selector will notify the working thread.
 
@@ -321,7 +323,7 @@ XNIO is community project developed under JBoss, which provides framework abstra
 
 One of the most important features of XNIO framework is its unique API, that combines both IO approaches, blocking and non-blocking to bring the best to users. The benefits of low latency of blocking IO with throughput and performance of non-blocking.
 
-  Undertow web server is fully based on XNIO framework under the hood, that is one of the reason why developers embedding Undertow can easily switch between blocking and non-blocking processing of incoming requests.  
+  Undertow web server is fully based on XNIO framework under the hood, that is one of the reason why developers embedding Undertow can easily switch between blocking and non-blocking processing of incoming requests.\cite{xnio-doc}  
 
 \section{Undertow}
 
@@ -329,11 +331,11 @@ Undertow is a flexible performant web server written in Java, providing both blo
 
 Undertow has a composition based architecture that allows you to build a web server by combining small single purpose handlers. That gives you the flexibility to choose between a full Java EE servlet 3.1 container, or a low level non-blocking handler, to anything in between.
 
-Undertow is designed to be fully embeddable, with easy to use fluent builder APIs. Undertow’s lifecycle is completely controlled by the embedding application.
+Undertow is designed to be fully embeddable, with easy to use fluent builder APIs. Undertow’s lifecycle is completely controlled by the embedding application.\cite{undertow-doc}
 
 Overview of key features:
 \begin{itemize}
-\item Lightweight - the core jar is under 1Mb, runtime taking up about 4 MB of heap
+\item Lightweight - the core jar is under 1 MB, runtime taking up about 4 MB of heap
 \item HTTP upgrade support - multiple protocols over HTTP
 \item Web Socket -  full support, including JSR-356
 \item Servlet 3.1 support 
@@ -342,7 +344,7 @@ Overview of key features:
 \end{itemize}
 
 \subsection{Embedded server}
-As stated above, Undertow is fully embeddable. There are two ways how to achieve it. The more simple one way is  to use builder API and set various properties as handlers, listeners, context paths and listening ports. The second approach is to manually assemble the whole server using XNIO and listener classes directly. Using builder API is sufficient for the purpose of this thesis.
+As stated above, Undertow is fully embeddable. There are two ways how to achieve it. The more simple way is  to use builder API and set various properties as handlers, listeners, context paths and listening ports. The second approach is to manually assemble the whole server using XNIO and listener classes directly. Using builder API is sufficient for the purpose of this thesis.
 
 There is no container, that is required to start. Embedded web server is managed by embedding application, also usage and chaining of handlers is under control of the application. 
 
@@ -353,22 +355,22 @@ The web development company, TechEmpower, regularly updates benchmark results of
 \begin{figure}[!h]
 \centering
 \includegraphics[width=1\linewidth]{images/undertow_benchmark.png}
-\caption{Performance comparison of web servers}
+\caption{Performance comparison of web servers\cite{perf}}
 \end{figure}
 
 \newpage
 
 \section{Similar HTTP components}
-The official Camel distribution already provides several components that have very similar functionality in comparison to Camel Undertow and are considered as HTTP provider components. The following part  will summarize the main differences between Camel HTTP, Camel Servlet, Camel Netty, Camel Netty HTTP and Camel Jetty. The last subsection will discuss the motivation for developing Camel Undertow components. Those lines are author's subjective though and summaries. 
+The official Camel distribution already provides several components that have very similar functionality in comparison to Camel Undertow and are considered as HTTP provider components. The following part  will summarize the main differences between Camel HTTP, Camel Servlet, Camel Netty, Camel Netty HTTP and Camel Jetty. The last subsection will discuss the motivation for developing Camel Undertow components. Those lines are author's subjective through and summaries. 
 
 \subsection{Camel HTTP}
-Camel HTTP is one of the core components. It supports only usage of producer, which acts like HTTP client. Therefore it can not be used as input in the route definition. The implementation leverages Apache HttpClient library to produce requests. When there is no special requirement for producing HTTP request, this component should be absolutely sufficient for most basic scenarios. 
+Camel HTTP is one of the core components. It supports only usage of producer, which acts like HTTP client. Therefore it cannot be used as input in the route definition. The implementation leverages Apache HttpClient library\footnote{Apache HttpClient  - http://hc.apache.org/httpclient-3.x/} to produce requests. When there is no special requirement for producing HTTP request, this component should be absolutely sufficient for most basic scenarios. 
 
 \subsection{Camel Servlet}
 Camel Servlet on the other hand provides support for input message, which is sent to Java servlet published by the endpoint. As the servlet container Tomcat web server is used in the implementation. The full route with consumer and producer endpoints can be achieved by combining Servlet and HTTP components.
 
 \subsection{Camel Netty and Netty HTTP}
-This component is implemented on top of Netty framework. The Netty project is also NIO based and should enable quick development of network application. Both blocking and non-blocking sockets are supported. Provides capability for both types of endpoint bind to TCP or UDP protocol. This components should be used if the direct access to above mentioned protocol is needed.
+This component is implemented on top of Netty framework. The Netty project is also NIO based and should enable quick development of network application. Both blocking and non-blocking sockets are supported. It provides capability for both types of endpoint bind to TCP\footnote{TCP - Transmission Control Protocol} or UDP\footnote{UDP - User Datagram Protocol} protocol. This component should be used if the direct access to above mentioned protocols is needed.
 
 Netty HTTP is extending the parent Netty component and add HTTP transport support. 
 
@@ -380,7 +382,7 @@ It may be confusing why we need another HTTP component, when there are so many a
 
 Certainly the answer is not so simple. The Camel user's community is wide and divergent. Some of them are satisfied with components coming from distribution. Another group might prefer writting its own component for specific task.
 
-Camel Undertow is bases on non-blocking approach to IO operations. It is written from scratch, performance numbers are quiet promising also. It is emerging new technology. There is no high demand for Camel Undertow component yet, but in few years the story may be completely different. Undetow might become very popular and dominant among Java web server implementations. Right now it is more a possibility than a necessity. 
+Camel Undertow is bases on non-blocking approach to IO operations. It is written from scratch, performance numbers are also quiet promising. It is emerging new technology. There is no high demand for Camel Undertow component yet, but in few years the story may be completely different. Undertow might become very popular and dominant among Java web server implementations. Right now it is more a possibility than a necessity. 
 
  
 
@@ -538,7 +540,7 @@ The web server is started through methods in \textit{UndertowComponent} class as
 \subsection{HttpCamelHandler class}
 Implementing of custom handlers for Undertow is straightforward. The custom handler needs to implement \textit{HttpHandler} interface which contains only one method \textit{handleRequest()}. Through this method the handler gets to \textit{HttpExchange} object which contains request and response channels, headers and request method type. 
 
-The processing of request has few partial conditions to meet to finally proceed to Camel Exchange. If the \textit{OPTIONS} method is received, the handler returns allowed methods. It check for restricted methods from configuration and reject all requests that do not follow the given restriction. If the request method can contain payload (POST, PUT), the request channel is opened to retrieve the body of message, otherwise payload is ignored for other methods.
+The processing of request has few partial conditions to meet to finally proceed to Camel Exchange. If the \textit{OPTIONS} method is received, the handler returns allowed methods. It check for restricted methods from configuration and reject all requests that do not follow the given restriction. If the request method can contain payload (POST, PUT), the request channel is opened to retrieve the body of message, otherwise payload is ignored for other methods.\cite{http}
 
 The Exchange is created through \textit{createExchange} method in Endpoint implementation. The whole \textit{HttpExchange} is used as input. During the Exchange creation \textit{toCamelMessage()} is invoked from the default HTTP binding to copy and filter required headers. The default HTTP binding is provided by class \textit{DefaultUndertowHttpBinding} which implement \textit{UndertowHttpBinding} interface. Conversion of HTTP request to Message benefits from automatic type converter feature. The body is extracted as array of bytes and directly set to Message object, the type converter works under the hood without direct invocation in the binding method. The binding can be changed to custom implementation specified in URI option to modify the behavior, copied headers, etc. When the Exchange is created the Processor can kick off and process it.
 
@@ -581,7 +583,7 @@ The newly created component was compared in simple test with two other component
 \caption{Execution time graph for 1000 and 10 0000 requests.}
 \end{figure}
 
-The metric used was simple to demonstrate the possible testing approach. For more comprehensive results a special tool could be used to generates requesta and measure numbers, for example PerfCake\footnote{PerfCake - https://www.perfcake.org/}
+The metric used was simple to demonstrate the possible testing approach. For more comprehensive results a special tool could be used to generates requests and measure numbers, for example PerfCake\footnote{PerfCake - https://www.perfcake.org/}
  The scenario was run ten times and average execution time value was calculated afterwards. Test scenario class is called \textit{UndertowPerfComparisonTest} and can be found in unit tests subdirectory. During the first cycle thousand of request was sent, the next cycle the number of request was increased to ten thousand.
 
 Listing of the measured numbers:
@@ -593,6 +595,28 @@ Listing of the measured numbers:
 
 
 \section{Examples of usage}
+There are two examples of route definition included in the attachment. They demonstrates the configuration and usage in Java DSL and Spring API. The whole example project can be run by Camel Maven plugin\footnote{Camel Maven plugin - http://camel.apache.org/camel-run-maven-goal.html}. This plugin simply runs the Camel context defined in a project. The instructions to run this particular project: 
+\begin{itemize}
+\item First it is needed to build the component code in camel-undertow directory
+\textit{mvn clean install}
+\item Navigate to camel-example-undertow directory and compile the example itself \textit{mvn compile}
+\item The last step \textit{mvn camel:run}
+\end{itemize}
+
+The above mentioned steps are also included in ReadMe file with the example source code.
+
+\begin{listing}[ht]
+	\inputminted[]{java}{sources/dsl-example.java}
+	\caption{Java DSL}
+\end{listing}
+
+\begin{listing}[H]
+	\inputminted[]{xml}{sources/spring-example.xml}
+	\caption{Spring API}
+\end{listing}
+
+
+
 
 
 
@@ -613,7 +637,15 @@ For the future development, the main goal is to harden the Producer part once th
 In summary to communities involvement in the development process. New component implementation is well documented in various sources online and offline. The Camel community has vital and extensive community that provides many examples, answers on StackOverflow and comprehensive documentation. As mentioned in chapter 2 there are also other very similar component to look for. The Undertow community is definitely much smaller. There is not so many materials available as for Camel definitely. Although almost all questions are answered by the authors of code themselves. The Undertow project is still finding its place under the Sun, the number of users and adopters raises. In a few year it might be dominant web server among Java based implementations. With the increasing interest will also the number of resources available grow significantly. 
 
 
+\chapter{Attachments}
 
+\section{Contents of included CD}
+\begin{itemize}
+\item master's thesis in PDF
+\item source code of the thesis in \LaTeX
+\item source code of Camel Undertow component
+\item examples
+\end{itemize}
   
 
 
@@ -635,12 +667,33 @@ In summary to communities involvement in the development process. New component 
 \bibliography{references}
 
 \begin{thebibliography}{}
-	\bibitem{camel-web} APACHE. \textit{Apache Camel} [online]. \copyright{} 2004- [cit. 2014-12-12]. Available at: \url{http://camel.apache.org/}
-	
-		\bibitem{dzone} DZONE RESEARCH. \textit{Guide to Enterprise Integration} [online]. \copyright{} 2014- [cit. 2014-12-12]. Available at: \url{http://www.dzone.com/research/guide-to-enterprise-integration}
-	
-	\bibitem{camel-in-action} IBSEN, Claus a Jonathan ANSTEY. \textit{Camel in Action}. Greenwich, Conn.: Manning, c2011, xxxi, ISBN 19-351-8236-6.
-	
+\bibitem{camel-web} APACHE. \textit{Apache Camel} [online]. 2004- [cite 2014-12-12]. Available at: \url{http://camel.apache.org/}
+
+\bibitem{undertow-web} JBOSS. \textit{JBoss Undertow} [online]. 2014- [cite 2014-12-12]. Available at: \url{http://undertow.io/index.html}
+
+\bibitem{java-web} ORACLE. \textit{Java} [online]. \copyright{} 2004- [cite 2014-12-12]. Available at: \url{http://www.java.com/}
+
+\bibitem{eip} HOHPE, Gregor and WOLF, Bobby. \textit{Enterprise integration patterns}. Boston: Addison-Wesley, c2003, li, ISBN 978-0321200686.
+				
+\bibitem{camel-in-action} IBSEN, Claus and ANSTEY,Jonathan. \textit{Camel in Action}. Greenwich, Conn.: Manning, c2011, xxxi, ISBN 
+19-351-8236-6.
+
+\bibitem{camel-cookbook} CRANTON, Scott and KORAB, Jakub. \textit{Apache Camel Developer's Cookbook}.  Birmingham: Packt publishing, c2013, ISBN 9781782170303.
+
+\bibitem{dzone} DZONE RESEARCH. \textit{Guide to Enterprise Integration} [online]. 2014- [cite 2014-12-14]. Available at: \url{http://www.dzone.com/research/guide-to-enterprise-integration}
+
+\bibitem{esb} THOMAS, Anne. \texit{https://www.gartner.com/doc/1405237/enterprise-service-bus-definition} [online]. 2007 - [cite 2014-12-14]. Available at: \url{https://www.gartner.com/doc/1405237/enterprise-service-bus-definition}
+
+\bibitem{java-nio} ORACLE. \textit{Java NIO} [online]. 2014- [cite 2014-12-12]. Available at: \url{http://docs.oracle.com/javase/7/docs/api/java/nio/package-summary.html}
+
+\bibitem{xnio-doc} JBOSS. \textit{XNIO Documentation Developer's Guide} [online]. 2014- [cite 2014-12-12]. Available at: \url{https://docs.jboss.org/author/display/XNIO/Developer%27s+Guide}
+
+\bibitem{undertow-doc} JBOSS. \textit{JBoss Undertow Documentation} [online]. 2014- [cite 2014-12-12]. Available at: \url{http://undertow.io/documentation/}
+
+\bibitem{perf} TECH EMPOWER. \textit{Web Framework Benchmarks - Round 9}. 2014- [cite 2014-12-16]. Available at: \url{http://www.techempower.com/benchmarks/#section=data-r9&hw=peak&test=json&l=3k}
+
+\bibitem{http} NETWORK WORKING GROUP. \textit{Hypertext Transfer Protocol -- HTTP/1.1
+} [online]. 1999- [cite 2014-12-03]. Available at : \url{https://www.ietf.org/rfc/rfc2616}
 \end{thebibliography}
 
 \endgroup
